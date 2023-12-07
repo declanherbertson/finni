@@ -9,7 +9,9 @@ function App() {
   if (loading) {
     return <div>Loading...</div>;
   }
-  return user ? (<Dashboard />) : (<Login />);
+  return (<div class="App">
+    {user ? (<Dashboard />) : (<Login />)}
+  </div>);
 }
 
 export default App;

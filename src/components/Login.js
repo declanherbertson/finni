@@ -7,13 +7,11 @@ import { auth } from '../firebase';
 function Login() {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Login!
-        </p>
-        <Button variant="contained" onClick={() => signInWithGoogle()} startIcon={<EditIcon />}>Login</Button>
-      </header>
+    <div className="Main">
+      <p>
+        Login!
+      </p>
+      <Button variant="contained" onClick={() => signInWithGoogle()} startIcon={<EditIcon />}>Login</Button>
     </div>
   );
 }
