@@ -9,7 +9,48 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Metrics {
+  padding-top: 8px;
+  width: 100%;
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Metric {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.Metric > p {
+  padding: 8px;
+}
+
+.Header {
+  padding-right: 8px;
+  width: 100%;
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.PatientTable {
+  background-color: white;
+  height: 75vh;
 }

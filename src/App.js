@@ -9,7 +9,7 @@ function App() {
   if (loading) {
     return <div>Loading...</div>;
   }
-  return (<div class="App">
+  return (<div className="App">
     {user ? (<Dashboard />) : (<Login />)}
   </div>);
 }

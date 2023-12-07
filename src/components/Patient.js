@@ -1,25 +1,18 @@
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import { Button } from '@mui/material';
 import { useState } from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
-function Patient({ id, patientData, shouldEdit = false }) {
-  const [edit, setEdit] = useState(shouldEdit);
-  return edit ? (
+export default function Patient({ onExit, onSave }) {
+  return (
     <div>
-      <p>
-        {JSON.stringify(patientData)}
-      </p>
-      <Button variant="contained" onClick={() => console.log('save ' + id)} startIcon={<SaveIcon />}>Save</Button>
-    </div>
-  ) : (
-    <div>
-      <p>
-        {JSON.stringify(patientData)}
-      </p>
-      <Button variant="contained" onClick={() => setEdit(true)} startIcon={<EditIcon />}>Edit</Button>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+        onClick={onExit}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }
-
-export default Patient;
