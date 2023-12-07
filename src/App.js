@@ -1,19 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import EditIcon  from '@mui/icons-material/Edit';
-import { Button } from '@mui/material';
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import { auth } from './firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Hello World!
-        </p>
-        <Button variant="contained" startIcon={<EditIcon />}>Hello World</Button>
-      </header>
-    </div>
-  );
+  const [user, loading, error] = useAuthState(auth);
+  return user ? (<Dashboard />) : (<Login />);
 }
 
 export default App;

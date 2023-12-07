@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 
 // NOTE:Declan this API key is not a key that we need to hide from users and in fact has to be provided in the bundled code.
 // NOTE:Declan If this was server side, we would want to store this in an environment variable to prevent exposing it in the codebase.
@@ -18,3 +19,4 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
