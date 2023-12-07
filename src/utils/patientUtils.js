@@ -11,6 +11,11 @@ const DEFAULT_FIELDS = new Set([
   'owner',
 ])
 
+export const IGNORED_FIELDS = new Set([
+  'id',
+  'owner',
+]);
+
 export const getCustomFields = (patients) => {
   const customFields = new Map();
   for (const patient of patients) {
@@ -30,6 +35,7 @@ export const DEFAULT_COLUMNS = [
     headerName: 'Full Name',
     type: 'string',
     width: 180,
+    flex: 1,
     editable: false,
     valueGetter: (params) => `${params.row.firstName || ''} ${params.row.middleName || ''} ${params.row.lastName || ''}` },
   {
@@ -37,6 +43,7 @@ export const DEFAULT_COLUMNS = [
     headerName: 'Date of Birth',
     type: 'date',
     width: 150,
+    flex: 1,
     editable: false,
     valueGetter: (params) => new Date(params.row.dob),
   },
@@ -45,6 +52,7 @@ export const DEFAULT_COLUMNS = [
     headerName: 'Status',
     type: 'string',
     width: 150,
+    flex: 1,
     editable: false,
   },
   {
@@ -52,15 +60,19 @@ export const DEFAULT_COLUMNS = [
     headerName: 'Address',
     type: 'string',
     width: 250,
+    flex: 1,
     editable: false,
     valueGetter: (params) => `${params.row.address?.join(', ') || ''}`,
   },
 ];
 
+export const DEFAULT_COLUMNS_MAP = new Map(DEFAULT_COLUMNS.map(c => [c.field, c]));
+
 export const customColumns = (customFields) => {
   return customFields.map(field => {
     return {
       field: field.name,
+      flex: 1,
       headerName: _.capitalize(field.name),
       type: field.type,
       width: 150,

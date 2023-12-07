@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon  from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { DEFAULT_COLUMNS_MAP, IGNORED_FIELDS } from '../utils/patientUtils';
+import _ from 'lodash';
 
 
 export default function Patient({ data, onExit, onSave, editDefault = false }) {
@@ -21,24 +23,35 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
     setEdit(false);
   }
 
-  const forms = [];
+  const fields = new Map(DEFAULT_COLUMNS_MAP);
+
   for (let key in data) {
-    if (key === 'id' || key === 'owner') continue;
-    forms.push({field: key, value: data[key], type: typeof data[key]});
+    if (IGNORED_FIELDS.has(key)) {
+      continue;
+    }
+    else if (fields.has(key)) {
+      fields.get(key).value = data[key];
+      console.warn(data[key])
+    } else {
+      console.log(key);
+      fields.set(key, {field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key]});
+    }
   }
-  const formComponents = forms.map((field) => {
+  const formComponents = Array.from(fields.values()).map((field) => {
     return (
       <TextField
         name={field.field}
         key={field.field}
         id={field.field}
-        label={field.field}
+        label={field.headerName}
         type={field.type}
         value={formData[field.field]}
+        multiline={field.type === 'string'}
+        minRows={3}
         onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
         margin="normal"
         variant="standard"
-        InputProps={{readOnly: !edit}}
+        InputProps={{readOnly: !edit, disableUnderline: true}}
       />
     )
   });
@@ -54,7 +67,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
         {formComponents}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onExit}>Cancel</Button>
+        <Button onClick={onExit}>Close</Button>
       </DialogActions>
     </Dialog>
   );
