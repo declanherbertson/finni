@@ -1,6 +1,7 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import { db } from './firebase.js'
+import { useCollection } from 'react-firebase-hooks/firestore';
 
-export const getPatients = () => {
-  return getDocs(collection(db, 'patients'));
+export const usePatients = (user) => {
+  return useCollection(query(collection(db, "patients"), where("owner", "==", user.uid)));
 }
