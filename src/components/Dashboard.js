@@ -15,8 +15,8 @@ function Dashboard() {
   const [signOut] = useSignOut(auth);
   const [user] = useAuthState(auth);
   const [value, loading] = usePatients(user);
-  let table = <CircularProgress color="inherit" />;
-  let metrics = <CircularProgress color="inherit" />;
+  let table = <div></div>;
+  let metrics = <CircularProgress color="inherit" size={'8rem'} />;
   if (!loading) {
     table = <PatientTable patients={
       value.docs.map(d => {

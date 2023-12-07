@@ -3,15 +3,16 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TuneIcon from '@mui/icons-material/Tune';
+import { addOrUpdatePatient } from '../patientActions';
 import _ from 'lodash';
 
 import {
   DataGrid,
   GridToolbarContainer,
-  GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
 import Patient from './Patient';
+import { set } from 'react-hook-form';
 
 function EditToolbar(patients) {
   const addFilter = () => {
@@ -42,6 +43,11 @@ export default function PatientTable({ patients }) {
     setModalOpen(params.id);
   }, 100);
 
+  const onSave = async (id, data) => {
+    await addOrUpdatePatient(id, data);
+    setModalOpen(undefined);
+  }
+
   const getPatientData = (id) => {
     return patients.find(p => p.id === id);
   }
@@ -69,7 +75,7 @@ export default function PatientTable({ patients }) {
         },
       }}
     >
-      {modalOpen && (<Patient data={getPatientData(modalOpen)} onExit={() => setModalOpen(undefined)} onSave={() => setModalOpen(undefined)} />)}
+      {modalOpen && (<Patient data={getPatientData(modalOpen)} onExit={() => setModalOpen(undefined)} onSave={onSave} />)}
       <DataGrid
         onRowClick={handleRowClick}
         rows={rows}
