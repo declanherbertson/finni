@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,7 +12,6 @@ import {
 } from '@mui/x-data-grid';
 import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
 import Patient from './Patient';
-import { set } from 'react-hook-form';
 
 function EditToolbar(patients) {
   const addFilter = () => {
@@ -36,8 +35,13 @@ function EditToolbar(patients) {
 }
 
 export default function PatientTable({ patients }) {
+  console.log(patients.map(p => p.firstName));
   const [rows, setRows] = useState(patients);
   const [modalOpen, setModalOpen] = useState(undefined);
+
+  useEffect(() => {
+    setRows(patients);
+  }, [patients]);
 
   const handleRowClick = _.debounce((params, event) => {
     setModalOpen(params.id);

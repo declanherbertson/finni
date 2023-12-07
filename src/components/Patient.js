@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -11,7 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 
 export default function Patient({ data, onExit, onSave, editDefault = false }) {
   const [edit, setEdit] = useState(editDefault);
-  const [formData, setFormData] = useState(data);
+  const [formData, setFormData] = useState(data);    
 
   const handleSave = async (event) => {
     event.preventDefault();
