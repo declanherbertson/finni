@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const DEFAULT_FIELDS = new Set([
   'id',
   'firstName',
@@ -26,6 +28,7 @@ export const getCustomFields = (patients) => {
 export const DEFAULT_COLUMNS = [
   { field: 'lastName',
     headerName: 'Full Name',
+    type: 'string',
     width: 180,
     editable: false,
     valueGetter: (params) => `${params.row.firstName || ''} ${params.row.middleName || ''} ${params.row.lastName || ''}` },
@@ -58,7 +61,7 @@ export const customColumns = (customFields) => {
   return customFields.map(field => {
     return {
       field: field.name,
-      headerName: field.name,
+      headerName: _.capitalize(field.name),
       type: field.type,
       width: 150,
       editable: false,
@@ -79,4 +82,11 @@ export const aggregateStatuses = (patients) => {
     }
   }
   return statuses;
+}
+
+export const STATUS_COLOUR_MAP = {
+  'inquiry': 'secondary',
+  'onboarding': 'primary',
+  'active': 'success',
+  'churned': 'error',
 }
