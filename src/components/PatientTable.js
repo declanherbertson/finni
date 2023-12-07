@@ -3,12 +3,15 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TuneIcon from '@mui/icons-material/Tune';
+import _ from 'lodash';
+
 import {
   DataGrid,
   GridToolbarContainer,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
+import Patient from './Patient';
 
 function EditToolbar(patients) {
   const addFilter = () => {
@@ -32,20 +35,18 @@ function EditToolbar(patients) {
 }
 
 export default function PatientTable({ patients }) {
-  // const patientList = usePatientList({ value });
   const [rows, setRows] = useState(patients);
+  const [modalOpen, setModalOpen] = useState(undefined);
+
+  const handleRowClick = _.debounce((params, event) => {
+    setModalOpen(params.id);
+  }, 100);
+
+  const getPatientData = (id) => {
+    return patients.find(p => p.id === id);
+  }
 
   const [rowModesModel, setRowModesModel] = useState({});
-
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
-  const handleEditClick = (id) => () => {
-    // TODO: call modal to edit patient
-  };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -68,7 +69,9 @@ export default function PatientTable({ patients }) {
         },
       }}
     >
+      {modalOpen && (<Patient data={getPatientData(modalOpen)} onExit={() => setModalOpen(undefined)} onSave={() => setModalOpen(undefined)} />)}
       <DataGrid
+        onRowClick={handleRowClick}
         rows={rows}
         columns={columns}
         editMode="row"

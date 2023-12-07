@@ -6,14 +6,14 @@ import { usePatients } from '../patientActions';
 import { auth } from '../firebase';
 import PatientTable from './PatientTable';
 import { aggregateStatuses } from '../utils/patientUtils';
-import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Dashboard() {
   const [signOut] = useSignOut(auth);
   const [user] = useAuthState(auth);
   const [value, loading] = usePatients(user);
-  let table = <span>loading...</span>;
-  let metrics = <span>loading...</span>;
+  let table = <CircularProgress color="inherit" />;
+  let metrics = <CircularProgress color="inherit" />;
   if (!loading) {
     table = <PatientTable patients={
       value.docs.map(d => {
