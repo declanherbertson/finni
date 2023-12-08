@@ -9,6 +9,7 @@ import {aggregateStatuses} from '../utils/patientUtils';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import _ from 'lodash';
+import { STATUS_OPTIONS } from '../utils/patientConstants';
 
 function Dashboard() {
   const [signOut] = useSignOut(auth);
@@ -26,13 +27,13 @@ function Dashboard() {
     const statuses = aggregateStatuses(
         value.docs.map((d) => d.data()),
     );
-    metrics = Object.keys(statuses).map((key) => {
+    metrics = STATUS_OPTIONS.map(({value, label}) => {
       return (
         <Box
           className='Metric'
         >
-          <p>{_.capitalize(key)}</p>
-          <h4>{statuses[key]}</h4>
+          <p>{label}</p>
+          <h4>{statuses[value] || 0}</h4>
 
         </Box>
       );

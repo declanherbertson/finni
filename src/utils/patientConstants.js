@@ -78,7 +78,6 @@ export const DEFAULT_COLUMNS = [
     default: true,
     required: true,
     editable: false,
-    valueGetter: (params) => `${Array.isArray(params.row.address) ? params.row.address.join(', ') || params.row.address : ''}`,
   },
 ];
 
