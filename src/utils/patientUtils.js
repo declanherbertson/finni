@@ -1,20 +1,10 @@
 import _ from 'lodash';
+import { DEFAULT_FIELDS, IGNORED_FIELDS, DEFAULT_FIELDS_MAP } from './patientConstants';
 
-const DEFAULT_FIELDS = new Set([
-  'id',
-  'firstName',
-  'middleName',
-  'lastName',
-  'dob',
-  'address',
-  'status',
-  'owner',
-])
-
-export const IGNORED_FIELDS = new Set([
-  'id',
-  'owner',
-]);
+export const handleAddField = (customFields, setCustomFields) => {
+  const newField = {field: `Field ${String(customFields.length + 1)}`, value: '', type: 'string'};
+  setCustomFields((f) => [...f, newField]);
+};
 
 export const getCustomFields = (patients) => {
   const customFields = new Map();
@@ -29,75 +19,6 @@ export const getCustomFields = (patients) => {
   }
   return Array.from(customFields.values());
 }
-
-export const DEFAULT_COLUMNS = [
-  { field: 'lastName',
-    headerName: 'Full Name',
-    type: 'string',
-    width: 180,
-    flex: 1,
-    default: true,
-    editable: false,
-    valueGetter: (params) => `${params.row.firstName || ''} ${params.row.middleName || ''} ${params.row.lastName || ''}` },
-  {
-    field: 'dob',
-    headerName: 'Date of Birth',
-    type: 'date',
-    width: 150,
-    flex: 1,
-    default: true,
-    editable: false,
-    valueGetter: (params) => new Date(params.row.dob),
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    type: 'string',
-    width: 150,
-    flex: 1,
-    default: true,
-    editable: false,
-  },
-  {
-    field: 'address',
-    headerName: 'Address',
-    type: 'string',
-    width: 250,
-    flex: 1,
-    default: true,
-    editable: false,
-    valueGetter: (params) => `${params.row.address?.join(', ') || ''}`,
-  },
-];
-
-export const DEFAULT_NAME_FIELDS = [
-  { field: 'firstName',
-    headerName: 'First Name',
-    type: 'string',
-    width: 150,
-    flex: 1,
-    default: true,
-    editable: false,
-  },
-  { field: 'middleName',
-    headerName: 'Middle Name',
-    type: 'string',
-    width: 150,
-    flex: 1,
-    default: true,
-    editable: false,
-  },
-  { field: 'lastName',
-    headerName: 'Last Name',
-    type: 'string',
-    width: 150,
-    flex: 1,
-    default: true,
-    editable: false,
-  },
-]
-
-export const DEFAULT_FIELDS_MAP = new Map([...DEFAULT_NAME_FIELDS.map(c => [c.field, c]), ...DEFAULT_COLUMNS.slice(1).map(c => [c.field, c])]);
 
 export const customColumns = (customFields) => {
   return customFields.map(field => {
@@ -127,16 +48,18 @@ export const aggregateStatuses = (patients) => {
   return statuses;
 }
 
-export const STATUS_OPTIONS = [
-  { value: 'inquiry', label: 'Inquiry' },
-  { value: 'onboarding', label: 'Onboarding' },
-  { value: 'active', label: 'Active' },
-  { value: 'churned', label: 'Churned' },
-];
+export const buildFieldsFromData = (data) => {
+  const fields = new Map(DEFAULT_FIELDS_MAP);
 
-export const STATUS_COLOUR_MAP = {
-  'inquiry': 'secondary',
-  'onboarding': 'primary',
-  'active': 'success',
-  'churned': 'error',
+  for (let key in data) {
+    if (IGNORED_FIELDS.has(key)) {
+      continue;
+    }
+    else if (fields.has(key)) {
+      fields.get(key).value = data[key];
+    } else {
+      fields.set(key, { field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key] });
+    }
+  }
+  return Array.from(fields.values());
 }

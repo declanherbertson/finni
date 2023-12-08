@@ -28,9 +28,7 @@
 }
 
 .Metric {
-  display: flex;
-  align-items: center;
-  padding-left: 16px;
+  margin: 2px;
 }
 
 .Metric > p {

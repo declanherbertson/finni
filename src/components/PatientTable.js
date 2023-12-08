@@ -6,7 +6,9 @@ import _ from 'lodash';
 import {
   DataGrid
 } from '@mui/x-data-grid';
-import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
+import { DEFAULT_COLUMNS } from '../utils/patientConstants';
+import { getCustomFields } from '../utils/patientUtils';
+import { customColumns } from '../utils/patientUtils';
 import EditToolbar from './PatientTableToolbar';
 import Patient from './Patient';
 

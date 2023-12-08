@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -7,12 +8,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon  from '@mui/icons-material/Add';
-
 import SaveIcon from '@mui/icons-material/Save';
-import { DEFAULT_FIELDS_MAP, IGNORED_FIELDS, STATUS_OPTIONS } from '../utils/patientUtils';
+import { DEFAULT_FIELDS_MAP, STATUS_OPTIONS } from '../utils/patientConstants';
 import MenuItem from '@mui/material/MenuItem';
-import _ from 'lodash';
 import CustomField from './CustomField';
+import { handleCustomFormUpdate, handleDeleteCustomField } from '../utils/customFormUtils';
+import { buildFieldsFromData, handleAddField } from '../utils/patientUtils';
 
 
 export default function Patient({ data, onExit, onSave, editDefault = false }) {
@@ -26,65 +27,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
     setEdit(false);
   }
 
-  const fields = new Map(DEFAULT_FIELDS_MAP);
-
-  for (let key in data) {
-    if (IGNORED_FIELDS.has(key)) {
-      continue;
-    }
-    else if (fields.has(key)) {
-      fields.get(key).value = data[key];
-    } else {
-      fields.set(key, {field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key]});
-    }
-  }
-
-  const [customFields, setCustomFields] = useState(Array.from(fields.values()));
-  const handleAddField = () => {
-    const newField = {field: `Field ${'7'}`, value: '', type: 'string'};
-    setCustomFields((f) => [...f, newField]);
-  };
-
-  const handleCustomFormUpdate = (e, field, row) => {
-    if (field === 'field') {
-      // update savable state
-      setFormData(formData => {
-        const newFormData = {...formData};
-        delete newFormData[row.field];
-        console.log('change field name', {...newFormData, [e.target.value]: row.value})
-        return {...newFormData, [e.target.value]: row.value}
-      });
-      // update display state
-      setCustomFields((f) => {
-        const newFields = [...f];
-        const index = newFields.findIndex((f) => f.field === row.field);
-        newFields[index].field = e.target.value;
-        return newFields;
-      });
-    } else if (field === 'value') {
-      // update savable state
-      setFormData(formData => {
-        console.log('change field value', {...formData, [row.field]: e.target.value})
-        return {...formData, [row.field]: e.target.value}
-      });
-      // update display state
-      setCustomFields((f) => {
-        const newFields = [...f];
-        const index = newFields.findIndex((f) => f.field === row.field);
-        newFields[index].value = e.target.value;
-        return newFields;
-      });
-    }
-  };
-
-  const handleDeleteCustomField = (field) => {
-    setCustomFields((f) => f.filter((f) => f.field !== field.field));
-    setFormData(formData => {
-      const newFormData = {...formData};
-      delete newFormData[field.field];
-      return newFormData;
-    });
-  }
+  const [customFields, setCustomFields] = useState(buildFieldsFromData(data));
 
   const formComponents = Array.from(customFields.values()).map((field) => {
     if (field.field === 'status') {
@@ -93,6 +36,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
           select
           required={DEFAULT_FIELDS_MAP.has(field.field)}
           label="Select"
+          key={field.field}
           value={formData[field.field]}
           helperText="Patient Status"
           InputProps={{readOnly: !edit}}
@@ -130,24 +74,31 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
     } else {
       return (
         <CustomField 
-          onUpdate={(e, field, row) => handleCustomFormUpdate(e, field, row)}
-          onDelete={() => handleDeleteCustomField(field)}
+          onUpdate={(e, field, row) => handleCustomFormUpdate(setCustomFields, setFormData, e, field, row)}
+          onDelete={() => handleDeleteCustomField(setCustomFields, setFormData, field)}
           row={field} canEdit={edit} 
       />)
     }
 
   });
-
-  // console.log(formComponents);
-
   
   return (
     <Dialog open={true} onClose={onExit} fullWidth={true} maxWidth={'xl'}>
       <DialogTitle style={{'display': 'flex', 'justifyContent': 'space-between'}}>
         Patient Record
         <span>
-          {edit && <Button variant="outlined" size='small' startIcon={<AddIcon />} onClick={() => handleAddField()}>Add Field</Button>}
-          <Button variant="text" type='submit' style={{'paddingLeft': '1.6rem'}} onClick={(e) => edit ? handleSave(e) : setEdit(true)} startIcon={edit ? <SaveIcon /> : <EditIcon />}>{edit ? 'Save' : 'Edit'}</Button>
+          {edit && <Button
+           variant="outlined" size='small' startIcon={<AddIcon />} 
+           onClick={() => handleAddField(customFields, setCustomFields)}>
+            Add Field
+          </Button>
+        }
+          <Button 
+            variant="text" type='submit' style={{'paddingLeft': '1.6rem'}}
+            onClick={(e) => edit ? handleSave(e) : setEdit(true)} 
+            startIcon={edit ? <SaveIcon /> : <EditIcon />}>
+              {edit ? 'Save' : 'Edit'}
+          </Button>
         </span>
       </DialogTitle>
       <DialogContent className='FormContent'>

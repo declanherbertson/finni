@@ -5,7 +5,8 @@ import { useSignOut, useAuthState } from 'react-firebase-hooks/auth';
 import { usePatients } from '../patientActions';
 import { auth } from '../firebase';
 import PatientTable from './PatientTable';
-import { STATUS_COLOUR_MAP, aggregateStatuses } from '../utils/patientUtils';
+import { STATUS_COLOUR_MAP } from '../utils/patientConstants';
+import { aggregateStatuses } from '../utils/patientUtils';
 import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -29,7 +30,11 @@ function Dashboard() {
     );
     metrics = Object.keys(statuses).map((key) => {
       return (
-        <Chip label={`${_.capitalize(key)}: ${statuses[key]}`} key={key} color={STATUS_COLOUR_MAP[key]} />
+        <Chip 
+          className='Metric'
+          label={`${_.capitalize(key)}: ${statuses[key]}`} 
+          key={key} color={STATUS_COLOUR_MAP[key]} 
+        />
       );
     });
   }
