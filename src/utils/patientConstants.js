@@ -1,3 +1,6 @@
+import Chip from '@mui/material/Chip';
+import _ from 'lodash';
+
 export const STATUS_OPTIONS = [
   {value: 'inquiry', label: 'Inquiry'},
   {value: 'onboarding', label: 'Onboarding'},
@@ -55,6 +58,13 @@ export const DEFAULT_COLUMNS = [
     flex: 1,
     default: true,
     editable: false,
+    renderCell: (params) => {
+      return (<Chip
+          className='Metric'
+          label={`${_.capitalize(params.row.status)}`}
+          color={STATUS_COLOUR_MAP[params.row.status]}
+        />);
+      },
   },
   {
     field: 'address',

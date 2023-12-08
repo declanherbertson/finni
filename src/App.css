@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #282c34;
+  background-color: white;
   min-height: 100vh;
 }
 
@@ -17,7 +17,7 @@
 .Metrics {
   padding-top: 8px;
   width: 100%;
-  background-color: #282c34;
+  background-color: white;
   min-height: 10vh;
   display: flex;
   flex-direction: row;
@@ -28,11 +28,29 @@
 }
 
 .Metric {
-  margin: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2rem;
+  padding: 1rem;
+  color: black;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  width: 7rem;
+  height: 5rem;
 }
 
 .Metric > p {
-  padding: 8px;
+  font-size: 1.2rem;
+  padding: 0px;
+  margin: 0px;
+}
+
+.Metric > h4 {
+  font-size: 1.8rem;
+  padding: 0px;
+  margin: 0px;
 }
 
 .FormContent {
@@ -45,19 +63,23 @@
 }
 
 .Header {
-  padding-right: 8px;
-  width: 100%;
-  background-color: #282c34;
+  justify-content: space-between;
+  width: 95%;
+  background-color: white;
+  color: black;
   min-height: 10vh;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
+.Header > h3 {
+  color: black;
+}
+
 .PatientTable {
   background-color: white;
-  height: 75vh;
+  height: 69vh;
 }

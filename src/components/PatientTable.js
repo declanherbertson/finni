@@ -58,7 +58,7 @@ export default function PatientTable({patients}) {
     <Box
       className="PatientTable"
       sx={{
-        'width': '100%',
+        'width': '95%',
         '& .actions': {
           color: 'text.secondary',
         },
