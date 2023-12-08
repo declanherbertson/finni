@@ -2,7 +2,7 @@ import CustomField from "./CustomField";
 import { handleCustomFormUpdate, handleDeleteCustomField } from "../utils/customFormUtils";
 import { DEFAULT_FIELDS_MAP, STATUS_OPTIONS } from "../utils/patientConstants";
 import MenuItem from "@mui/material/MenuItem";
-import { TextField } from "@mui/material";
+import { ValidationTextField, dateValidator, emptyValidator } from "../utils/validators";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,8 +12,9 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
   return Array.from(customFields.values()).map((field) => {
     if (field.field === 'status') {
       return (
-        <TextField
+        <ValidationTextField
           select
+          error={!emptyValidator(formData[field.field])}
           required={DEFAULT_FIELDS_MAP.has(field.field)}
           label="Select"
           key={field.field}
@@ -30,12 +31,17 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
               {option.label}
             </MenuItem>
           ))}
-        </TextField>
+        </ValidationTextField>
       )
     } else if (field.field === 'dob') {
       return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
+            slotProps={{
+              textField: {
+                error: !dateValidator(formData[field.field]),
+              },
+            }}
             required
             label="Date of Birth"
             value={formData[field.field] ? dayjs(formData[field.field]) : undefined}
@@ -44,10 +50,11 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
           />
         </LocalizationProvider>
       )
-
-    } else if (field.default) {
-        return (
-          <TextField
+    } else if (field.field === 'address') {
+      return (
+          <ValidationTextField
+            style={{'marginTop': '0px'}}
+            error={!emptyValidator(formData[field.field])}
             name={field.field}
             key={field.field}
             id={field.field}
@@ -59,7 +66,27 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
             minRows={3}
             onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
             margin="normal"
-            variant="standard"
+            variant="outlined"
+            disabled={!edit}
+            InputProps={{readOnly: !edit, disableUnderline: true}}
+          />
+        )
+    } else if (field.default) {
+        return (
+          <ValidationTextField
+            error={!emptyValidator(formData[field.field])}
+            name={field.field}
+            key={field.field}
+            id={field.field}
+            label={field.headerName}
+            type={field.type}
+            required={true}
+            value={formData[field.field]}
+            multiline={field.type === 'string'}
+            minRows={3}
+            onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
+            margin="normal"
+            variant="outlined"
             disabled={!edit}
             InputProps={{readOnly: !edit, disableUnderline: true}}
           />

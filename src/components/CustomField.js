@@ -3,12 +3,13 @@ import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuItem from '@mui/material/MenuItem';
 import { TYPE_OPTIONS } from '../utils/customFormUtils';
+import { ValidationTextField, numberValidator } from '../utils/validators';
 
 export default function CustomField({ row, onDelete, onUpdate, canEdit = false }) {
   return (
     <div style={{'display': 'flex'}}>
       <span style={{'display': 'grid', 'flex': 10, 'rowGap': '.5em'}}>
-        <TextField
+        <ValidationTextField
           disabled={!canEdit}
           label="Field"
           value={row.field}
@@ -16,15 +17,17 @@ export default function CustomField({ row, onDelete, onUpdate, canEdit = false }
           size='small'
           InputProps={{readOnly: false}}
         />
-        <TextField
+        <ValidationTextField
           disabled={!canEdit}
+          multiline={row.type === 'string'}
+          error={row.type === 'number' && !numberValidator(row.value)}
           label="Value"
           value={row.value}
           onChange={(e) => onUpdate(e, 'value', row)}
           size='small'
           InputProps={{readOnly: false}}
         />
-        <TextField
+        <ValidationTextField
           select
           disabled={!canEdit}
           label="Type"
@@ -38,7 +41,7 @@ export default function CustomField({ row, onDelete, onUpdate, canEdit = false }
               {option.label}
             </MenuItem>
           ))}
-      </TextField>
+      </ValidationTextField>
       </span>
       {canEdit && <Button 
         size='small' variant="text" color="error" 
