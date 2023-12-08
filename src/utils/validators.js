@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
+import { DEFAULT_FIELDS } from './patientConstants';
 
 export const ValidationTextField = styled(TextField)({
   '& input:valid + fieldset': {
@@ -28,3 +29,15 @@ export const numberValidator = (value) => {
 export const dateValidator = (value) => {
   return emptyValidator(value) && dayjs(value).isValid() && dayjs(value).isBefore(dayjs());
 }
+
+export const formValidator = (formData) => {
+  for (const field of Array.from(DEFAULT_FIELDS)) {
+    if (field === 'middelName') {
+      continue;
+    }
+    if (!formData[field]) {
+      return false;
+    }
+  };
+  return true;
+};

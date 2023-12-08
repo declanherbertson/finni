@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import { buildFieldsFromData, handleAddField, getDataWithDefaults } from '../utils/patientUtils';
 import { getFormComponents } from './PatientFields';
+import { formValidator } from '../utils/validators';
 
 
 
@@ -54,6 +55,7 @@ export default function Patient({ data, onExit, onSave, onDelete, editDefault = 
           }
           <Button 
             variant="text" type='submit' style={{'marginLeft': '1rem'}}
+            disabled={edit && !formValidator(formData)}
             onClick={(e) => edit ? handleSave(e) : setEdit(true)} 
             startIcon={edit ? <SaveIcon /> : <EditIcon />}>
               {edit ? 'Save' : 'Edit'}
