@@ -29,7 +29,7 @@ function Dashboard() {
     );
     metrics = Object.keys(statuses).map((key) => {
       return (
-        <Chip label={`${_.capitalize(key)}: ${statuses[key]}`} color={STATUS_COLOUR_MAP[key]} />
+        <Chip label={`${_.capitalize(key)}: ${statuses[key]}`} key={key} color={STATUS_COLOUR_MAP[key]} />
       );
     });
   }

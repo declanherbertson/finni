@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function CustomField({ row, onDelete, onUpdate, canEdit = false }) {
+  console.log('custom row', row)
   return (
     <div style={{'display': 'flex'}}>
       <TextField

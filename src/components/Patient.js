@@ -21,7 +21,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
 
   const handleSave = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    console.log('saving', formData);
     await onSave(data.id, formData);
     setEdit(false);
   }
@@ -34,9 +34,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
     }
     else if (fields.has(key)) {
       fields.get(key).value = data[key];
-      console.warn(data[key])
     } else {
-      console.log(key);
       fields.set(key, {field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key]});
     }
   }
@@ -48,18 +46,45 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
   };
 
   const handleCustomFormUpdate = (e, field, row) => {
-    console.log(e.target.value, field, row);
-    setCustomFields((f) => f.map((r) => {
-      if (r.field === row.field) {
-        return {...r, [field]: e.target.value};
-      }
-      return r;
-    }));
-    setFormData({...formData, ...{...row, [field]: e.target.value}})
+    if (field === 'field') {
+      // update savable state
+      setFormData(formData => {
+        const newFormData = {...formData};
+        delete newFormData[row.field];
+        console.log('change field name', {...newFormData, [e.target.value]: row.value})
+        return {...newFormData, [e.target.value]: row.value}
+      });
+      // update display state
+      setCustomFields((f) => {
+        const newFields = [...f];
+        const index = newFields.findIndex((f) => f.field === row.field);
+        newFields[index].field = e.target.value;
+        return newFields;
+      });
+    } else if (field === 'value') {
+      // update savable state
+      setFormData(formData => {
+        console.log('change field value', {...formData, [row.field]: e.target.value})
+        return {...formData, [row.field]: e.target.value}
+      });
+      // update display state
+      setCustomFields((f) => {
+        const newFields = [...f];
+        const index = newFields.findIndex((f) => f.field === row.field);
+        newFields[index].value = e.target.value;
+        return newFields;
+      });
+    }
   };
 
-
-  console.log(customFields);
+  const handleDeleteCustomField = (field) => {
+    setCustomFields((f) => f.filter((f) => f.field !== field.field));
+    setFormData(formData => {
+      const newFormData = {...formData};
+      delete newFormData[field.field];
+      return newFormData;
+    });
+  }
 
   const formComponents = Array.from(customFields.values()).map((field) => {
     if (field.field === 'status') {
@@ -68,7 +93,7 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
           select
           required={DEFAULT_FIELDS_MAP.has(field.field)}
           label="Select"
-          defaultValue={field.value}
+          value={formData[field.field]}
           helperText="Patient Status"
           InputProps={{readOnly: !edit}}
           disabled={!edit}
@@ -106,14 +131,14 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
       return (
         <CustomField 
           onUpdate={(e, field, row) => handleCustomFormUpdate(e, field, row)}
-          onDelete={() => setCustomFields((f) => f.filter((r) => r.field !== field.field))}
+          onDelete={() => handleDeleteCustomField(field)}
           row={field} canEdit={edit} 
       />)
     }
 
   });
 
-  console.log(formComponents);
+  // console.log(formComponents);
 
   
   return (

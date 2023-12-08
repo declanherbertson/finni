@@ -11,7 +11,7 @@ import EditToolbar from './PatientTableToolbar';
 import Patient from './Patient';
 
 export default function PatientTable({ patients }) {
-  console.log(patients.map(p => p.firstName));
+  // console.log(patients.map(p => p.firstName));
   const [rows, setRows] = useState(patients);
   const [modalOpen, setModalOpen] = useState(undefined);
 
@@ -39,8 +39,8 @@ export default function PatientTable({ patients }) {
   };
 
   const customFields = getCustomFields(patients);
-  const columns = [...DEFAULT_COLUMNS, ...customColumns(customFields)]
-  console.log(columns, rows)
+  const columns = [...DEFAULT_COLUMNS, ...customColumns(customFields)];
+  // console.log(columns, rows)
 
   return (
     <Box
