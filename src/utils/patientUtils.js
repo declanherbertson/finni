@@ -50,7 +50,7 @@ export const aggregateStatuses = (patients) => {
 
 export const buildFieldsFromData = (data) => {
   const fields = new Map(DEFAULT_FIELDS_MAP);
-  if (data.id === 'NEW') {
+  if (!data || !data.id || data.id === 'NEW') {
     return Array.from(fields.values()).map((f) => ({...f, value: ''}));
   }
 

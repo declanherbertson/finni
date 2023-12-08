@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { TYPE_OPTIONS } from '../utils/customFormUtils';
 
 export default function CustomField({ row, onDelete, onUpdate, canEdit = false }) {
-  console.log('custom row', row)
   return (
     <div style={{'display': 'flex'}}>
       <span style={{'display': 'grid', 'flex': 10, 'rowGap': '.5em'}}>

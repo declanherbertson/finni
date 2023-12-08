@@ -9,11 +9,11 @@ export const usePatients = (user) => {
 }
 
 export const addOrUpdatePatient = async (id, patient) => {
-  console.log("addOrUpdatePatient", id, patient);
   patient.owner = auth.currentUser.uid;
   if (!id || id === 'NEW') {
     const collectionRef = collection(db, "patients");
-    return await setDoc(doc(collectionRef), patient);
+    const docRef = doc(collectionRef);
+    return await setDoc(docRef, { ...patient, id: docRef.id });
   } else {
     const collectionRef = collection(db, "patients");
     return await setDoc(doc(collectionRef, id), patient);
