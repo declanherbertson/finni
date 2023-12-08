@@ -1,10 +1,8 @@
-import _ from 'lodash';
-
 export const STATUS_OPTIONS = [
-  { value: 'inquiry', label: 'Inquiry' },
-  { value: 'onboarding', label: 'Onboarding' },
-  { value: 'active', label: 'Active' },
-  { value: 'churned', label: 'Churned' },
+  {value: 'inquiry', label: 'Inquiry'},
+  {value: 'onboarding', label: 'Onboarding'},
+  {value: 'active', label: 'Active'},
+  {value: 'churned', label: 'Churned'},
 ];
 
 export const STATUS_COLOUR_MAP = {
@@ -12,7 +10,7 @@ export const STATUS_COLOUR_MAP = {
   'onboarding': 'primary',
   'active': 'success',
   'churned': 'error',
-}
+};
 
 export const DEFAULT_FIELDS = new Set([
   'id',
@@ -23,7 +21,7 @@ export const DEFAULT_FIELDS = new Set([
   'address',
   'status',
   'owner',
-])
+]);
 
 export const IGNORED_FIELDS = new Set([
   'id',
@@ -31,14 +29,14 @@ export const IGNORED_FIELDS = new Set([
 ]);
 
 export const DEFAULT_COLUMNS = [
-  { field: 'lastName',
+  {field: 'lastName',
     headerName: 'Full Name',
     type: 'string',
     width: 180,
     flex: 1,
     default: true,
     editable: false,
-    valueGetter: (params) => `${params.row.firstName || ''} ${params.row.middleName || ''} ${params.row.lastName || ''}` },
+    valueGetter: (params) => `${params.row.firstName || ''} ${params.row.middleName || ''} ${params.row.lastName || ''}`},
   {
     field: 'dob',
     headerName: 'Date of Birth',
@@ -71,7 +69,7 @@ export const DEFAULT_COLUMNS = [
 ];
 
 export const DEFAULT_NAME_FIELDS = [
-  { field: 'firstName',
+  {field: 'firstName',
     headerName: 'First Name',
     type: 'string',
     width: 150,
@@ -79,7 +77,7 @@ export const DEFAULT_NAME_FIELDS = [
     default: true,
     editable: false,
   },
-  { field: 'middleName',
+  {field: 'middleName',
     headerName: 'Middle Name',
     type: 'string',
     width: 150,
@@ -87,7 +85,7 @@ export const DEFAULT_NAME_FIELDS = [
     default: true,
     editable: false,
   },
-  { field: 'lastName',
+  {field: 'lastName',
     headerName: 'Last Name',
     type: 'string',
     width: 150,
@@ -95,6 +93,6 @@ export const DEFAULT_NAME_FIELDS = [
     default: true,
     editable: false,
   },
-]
+];
 
-export const DEFAULT_FIELDS_MAP = new Map([...DEFAULT_NAME_FIELDS.map(c => [c.field, c]), ...DEFAULT_COLUMNS.slice(1).map(c => [c.field, c])]);
+export const DEFAULT_FIELDS_MAP = new Map([...DEFAULT_NAME_FIELDS.map((c) => [c.field, c]), ...DEFAULT_COLUMNS.slice(1).map((c) => [c.field, c])]);

@@ -1,8 +1,8 @@
 import '../App.css';
-import EditIcon  from '@mui/icons-material/Edit';
-import { Button } from '@mui/material';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
+import EditIcon from '@mui/icons-material/Edit';
+import {Button} from '@mui/material';
+import {useSignInWithGoogle} from 'react-firebase-hooks/auth';
+import {auth} from '../firebase';
 
 function Login() {
   const [signInWithGoogle] = useSignInWithGoogle(auth);

@@ -1,12 +1,12 @@
-import CustomField from "./CustomField";
-import { handleCustomFormUpdate, handleDeleteCustomField } from "../utils/customFormUtils";
-import { DEFAULT_FIELDS_MAP, STATUS_OPTIONS } from "../utils/patientConstants";
-import MenuItem from "@mui/material/MenuItem";
-import { ValidationTextField, dateValidator, emptyValidator } from "../utils/validators";
-import dayjs from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import CustomField from './CustomField';
+import {handleCustomFormUpdate, handleDeleteCustomField} from '../utils/customFormUtils';
+import {DEFAULT_FIELDS_MAP, STATUS_OPTIONS} from '../utils/patientConstants';
+import MenuItem from '@mui/material/MenuItem';
+import {ValidationTextField, dateValidator, emptyValidator} from '../utils/validators';
+import dayjs from 'dayjs';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 
 export const getFormComponents = (formData, setFormData, edit, customFields, setCustomFields) => {
   return Array.from(customFields.values()).map((field) => {
@@ -32,7 +32,7 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
             </MenuItem>
           ))}
         </ValidationTextField>
-      )
+      );
     } else if (field.field === 'dob') {
       return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -49,55 +49,55 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
             disabled={!edit}
           />
         </LocalizationProvider>
-      )
+      );
     } else if (field.field === 'address') {
       return (
-          <ValidationTextField
-            style={{'marginTop': '0px'}}
-            error={!emptyValidator(formData[field.field])}
-            name={field.field}
-            key={field.field}
-            id={field.field}
-            label={field.headerName}
-            type={field.type}
-            required={true}
-            value={formData[field.field]}
-            multiline={field.type === 'string'}
-            minRows={3}
-            onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
-            margin="normal"
-            variant="outlined"
-            disabled={!edit}
-            InputProps={{readOnly: !edit, disableUnderline: true}}
-          />
-        )
+        <ValidationTextField
+          style={{'marginTop': '0px'}}
+          error={!emptyValidator(formData[field.field])}
+          name={field.field}
+          key={field.field}
+          id={field.field}
+          label={field.headerName}
+          type={field.type}
+          required={true}
+          value={formData[field.field]}
+          multiline={field.type === 'string'}
+          minRows={3}
+          onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
+          margin="normal"
+          variant="outlined"
+          disabled={!edit}
+          InputProps={{readOnly: !edit, disableUnderline: true}}
+        />
+      );
     } else if (field.default) {
-        return (
-          <ValidationTextField
-            error={!emptyValidator(formData[field.field])}
-            name={field.field}
-            key={field.field}
-            id={field.field}
-            label={field.headerName}
-            type={field.type}
-            required={true}
-            value={formData[field.field]}
-            multiline={field.type === 'string'}
-            minRows={3}
-            onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
-            margin="normal"
-            variant="outlined"
-            disabled={!edit}
-            InputProps={{readOnly: !edit, disableUnderline: true}}
-          />
-        )
+      return (
+        <ValidationTextField
+          error={!emptyValidator(formData[field.field])}
+          name={field.field}
+          key={field.field}
+          id={field.field}
+          label={field.headerName}
+          type={field.type}
+          required={true}
+          value={formData[field.field]}
+          multiline={field.type === 'string'}
+          minRows={3}
+          onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
+          margin="normal"
+          variant="outlined"
+          disabled={!edit}
+          InputProps={{readOnly: !edit, disableUnderline: true}}
+        />
+      );
     } else {
       return (
-        <CustomField 
+        <CustomField
           onUpdate={(e, field, row) => handleCustomFormUpdate(setCustomFields, setFormData, e, field, row)}
           onDelete={() => handleDeleteCustomField(setCustomFields, setFormData, field)}
-          row={field} canEdit={edit} 
-      />)
+          row={field} canEdit={edit}
+        />);
     }
-});
+  });
 };

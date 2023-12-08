@@ -1,16 +1,16 @@
 export const TYPE_OPTIONS = [
-  { value: 'string', label: 'String' },
-  { value: 'number', label: 'Number' },
+  {value: 'string', label: 'String'},
+  {value: 'number', label: 'Number'},
 ];
 
 export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, row) => {
   if (field === 'field') {
     // update savable state
-    setFormData(formData => {
+    setFormData((formData) => {
       const newFormData = {...formData};
       delete newFormData[row.field];
-      console.log('change field name', {...newFormData, [e.target.value]: row.value})
-      return {...newFormData, [e.target.value]: row.value}
+      console.log('change field name', {...newFormData, [e.target.value]: row.value});
+      return {...newFormData, [e.target.value]: row.value};
     });
     // update display state
     setCustomFields((f) => {
@@ -21,9 +21,9 @@ export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, r
     });
   } else if (field === 'value') {
     // update savable state
-    setFormData(formData => {
-      console.log('change field value', {...formData, [row.field]: e.target.value})
-      return {...formData, [row.field]: e.target.value}
+    setFormData((formData) => {
+      console.log('change field value', {...formData, [row.field]: e.target.value});
+      return {...formData, [row.field]: e.target.value};
     });
     // update display state
     setCustomFields((f) => {
@@ -34,13 +34,13 @@ export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, r
     });
   } else if (field === 'type') {
     // update savable state
-    setFormData(formData => {
+    setFormData((formData) => {
       const newFormData = {...formData};
       delete newFormData[row.field];
       if (e.target.value === 'number' && isNaN(Number(row.value))) {
         row.value = 0;
       }
-      return {...newFormData, [row.field]: e.target.value === 'number' ? Number(row.value) : row.value}
+      return {...newFormData, [row.field]: e.target.value === 'number' ? Number(row.value) : row.value};
     });
     // update display state
     setCustomFields((f) => {
@@ -57,9 +57,9 @@ export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, r
 
 export const handleDeleteCustomField = (setCustomFields, setFormData, field) => {
   setCustomFields((f) => f.filter((f) => f.field !== field.field));
-  setFormData(formData => {
+  setFormData((formData) => {
     const newFormData = {...formData};
     delete newFormData[field.field];
     return newFormData;
   });
-}
+};

@@ -1,12 +1,12 @@
 import '../App.css';
-import EditIcon  from '@mui/icons-material/Edit';
-import { Button } from '@mui/material';
-import { useSignOut, useAuthState } from 'react-firebase-hooks/auth';
-import { usePatients } from '../patientActions';
-import { auth } from '../firebase';
+import EditIcon from '@mui/icons-material/Edit';
+import {Button} from '@mui/material';
+import {useSignOut, useAuthState} from 'react-firebase-hooks/auth';
+import {usePatients} from '../patientActions';
+import {auth} from '../firebase';
 import PatientTable from './PatientTable';
-import { STATUS_COLOUR_MAP } from '../utils/patientConstants';
-import { aggregateStatuses } from '../utils/patientUtils';
+import {STATUS_COLOUR_MAP} from '../utils/patientConstants';
+import {aggregateStatuses} from '../utils/patientUtils';
 import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -20,20 +20,20 @@ function Dashboard() {
   let metrics = <CircularProgress color="inherit" size={'8rem'} />;
   if (!loading) {
     table = <PatientTable patients={
-      value.docs.map(d => {
-        return { id: d.id, ...d.data() }
+      value.docs.map((d) => {
+        return {id: d.id, ...d.data()};
       })
-      } />;
-    
+    } />;
+
     const statuses = aggregateStatuses(
-      value.docs.map(d => d.data())
+        value.docs.map((d) => d.data()),
     );
     metrics = Object.keys(statuses).map((key) => {
       return (
-        <Chip 
+        <Chip
           className='Metric'
-          label={`${_.capitalize(key)}: ${statuses[key]}`} 
-          key={key} color={STATUS_COLOUR_MAP[key]} 
+          label={`${_.capitalize(key)}: ${statuses[key]}`}
+          key={key} color={STATUS_COLOUR_MAP[key]}
         />
       );
     });
@@ -49,7 +49,7 @@ function Dashboard() {
           {metrics}
         </Stack>
       </div>
-      
+
       {table}
     </div>
   );

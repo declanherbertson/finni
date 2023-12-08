@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { addOrUpdatePatient, deletePatient } from '../patientActions';
-import { DataGrid } from '@mui/x-data-grid';
-import { DEFAULT_COLUMNS } from '../utils/patientConstants';
-import { getCustomFields } from '../utils/patientUtils';
-import { customColumns } from '../utils/patientUtils';
+import {useEffect, useState} from 'react';
+import {addOrUpdatePatient, deletePatient} from '../patientActions';
+import {DataGrid} from '@mui/x-data-grid';
+import {DEFAULT_COLUMNS} from '../utils/patientConstants';
+import {getCustomFields} from '../utils/patientUtils';
+import {customColumns} from '../utils/patientUtils';
 import Box from '@mui/material/Box';
 import PatientToolbar from './PatientTableToolbar';
 import Patient from './Patient';
 
-export default function PatientTable({ patients }) {
+export default function PatientTable({patients}) {
   const [rows, setRows] = useState(patients);
   const [modalOpen, setModalOpen] = useState(undefined);
 
@@ -28,7 +28,7 @@ export default function PatientTable({ patients }) {
   const onSave = async (id, data) => {
     await addOrUpdatePatient(id, data);
     setModalOpen(undefined);
-  }
+  };
 
   const onDelete = async (id) => {
     console.log('deleting', id);
@@ -36,14 +36,14 @@ export default function PatientTable({ patients }) {
       await deletePatient(id);
     }
     setModalOpen(undefined);
-  }
+  };
 
   const getPatientData = (id) => {
     if (id === 'NEW') {
-      return { id: 'NEW' };
+      return {id: 'NEW'};
     }
-    return patients.find(p => p.id === id);
-  }
+    return patients.find((p) => p.id === id);
+  };
 
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -58,7 +58,7 @@ export default function PatientTable({ patients }) {
     <Box
       className="PatientTable"
       sx={{
-        width: '100%',
+        'width': '100%',
         '& .actions': {
           color: 'text.secondary',
         },
@@ -81,7 +81,7 @@ export default function PatientTable({ patients }) {
           toolbar: () => <PatientToolbar onAddPatient={handleAddPatient}/>,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: {setRows, setRowModesModel},
         }}
       />
     </Box>

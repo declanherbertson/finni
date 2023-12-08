@@ -1,8 +1,8 @@
 import './App.css';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
-import { auth } from './firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import {auth} from './firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
 import CircularProgress from '@mui/material/CircularProgress';
 
 

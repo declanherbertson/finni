@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { DEFAULT_FIELDS, IGNORED_FIELDS, DEFAULT_FIELDS_MAP } from './patientConstants';
+import {DEFAULT_FIELDS, IGNORED_FIELDS, DEFAULT_FIELDS_MAP} from './patientConstants';
 
 export const handleAddField = (customFields, setCustomFields) => {
   const newField = {field: `Field ${String(customFields.length + 1)}`, value: '', type: 'string'};
@@ -10,7 +10,7 @@ export const getCustomFields = (patients) => {
   const customFields = new Map();
   for (const patient of patients) {
     for (const key of Object.keys(patient)) {
-      const field = { name: key, type: typeof patient[key] };
+      const field = {name: key, type: typeof patient[key]};
       const fieldKey = `${field.name}-${field.type}`;
       if (!DEFAULT_FIELDS.has(key) && !customFields.has(fieldKey)) {
         customFields.set(`${field.name}-${field.type}`, field);
@@ -18,10 +18,10 @@ export const getCustomFields = (patients) => {
     }
   }
   return Array.from(customFields.values());
-}
+};
 
 export const customColumns = (customFields) => {
-  return customFields.map(field => {
+  return customFields.map((field) => {
     return {
       field: field.name,
       flex: 1,
@@ -29,9 +29,9 @@ export const customColumns = (customFields) => {
       type: field.type,
       width: 150,
       editable: false,
-    }
+    };
   });
-}
+};
 
 export const aggregateStatuses = (patients) => {
   const statuses = {};
@@ -46,7 +46,7 @@ export const aggregateStatuses = (patients) => {
     }
   }
   return statuses;
-}
+};
 
 export const buildFieldsFromData = (data) => {
   const fields = new Map(DEFAULT_FIELDS_MAP);
@@ -54,18 +54,17 @@ export const buildFieldsFromData = (data) => {
     return Array.from(fields.values()).map((f) => ({...f, value: ''}));
   }
 
-  for (let key in data) {
+  for (const key in data) {
     if (IGNORED_FIELDS.has(key)) {
       continue;
-    }
-    else if (fields.has(key)) {
+    } else if (fields.has(key)) {
       fields.get(key).value = data[key];
     } else {
-      fields.set(key, { field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key] });
+      fields.set(key, {field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key]});
     }
   }
   return Array.from(fields.values());
-}
+};
 
 export const getDataWithDefaults = (data) => {
   if (!data || !data.id || data.id === 'NEW') {
@@ -77,4 +76,4 @@ export const getDataWithDefaults = (data) => {
     return defaultData;
   }
   return data;
-}
+};

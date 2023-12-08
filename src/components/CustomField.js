@@ -1,10 +1,10 @@
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuItem from '@mui/material/MenuItem';
-import { TYPE_OPTIONS } from '../utils/customFormUtils';
-import { ValidationTextField, numberValidator } from '../utils/validators';
+import {TYPE_OPTIONS} from '../utils/customFormUtils';
+import {ValidationTextField, numberValidator} from '../utils/validators';
 
-export default function CustomField({ row, onDelete, onUpdate, canEdit = false }) {
+export default function CustomField({row, onDelete, onUpdate, canEdit = false}) {
   return (
     <div style={{'display': 'flex'}}>
       <span style={{'display': 'grid', 'flex': 10, 'rowGap': '.5em'}}>
@@ -40,14 +40,12 @@ export default function CustomField({ row, onDelete, onUpdate, canEdit = false }
               {option.label}
             </MenuItem>
           ))}
-      </ValidationTextField>
+        </ValidationTextField>
       </span>
-      {canEdit && <Button 
-        size='small' variant="text" color="error" 
+      {canEdit && <Button
+        size='small' variant="text" color="error"
         style={{'flex': 1}}
         onClick={onDelete} startIcon={<DeleteIcon />} />}
     </div>
   );
-
-
 }
