@@ -66,3 +66,15 @@ export const buildFieldsFromData = (data) => {
   }
   return Array.from(fields.values());
 }
+
+export const getDataWithDefaults = (data) => {
+  if (!data || !data.id || data.id === 'NEW') {
+    // return DEFAULT_FIELDS as an object with empty strings
+    const defaultData = {};
+    for (const field of DEFAULT_FIELDS) {
+      defaultData[field.field] = '';
+    }
+    return defaultData;
+  }
+  return data;
+}

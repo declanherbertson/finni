@@ -14,12 +14,19 @@ import { DEFAULT_FIELDS_MAP, STATUS_OPTIONS } from '../utils/patientConstants';
 import MenuItem from '@mui/material/MenuItem';
 import CustomField from './CustomField';
 import { handleCustomFormUpdate, handleDeleteCustomField } from '../utils/customFormUtils';
-import { buildFieldsFromData, handleAddField } from '../utils/patientUtils';
+import { buildFieldsFromData, handleAddField, getDataWithDefaults } from '../utils/patientUtils';
+
+import dayjs from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 
 
 export default function Patient({ data, onExit, onSave, onDelete, editDefault = false }) {
+  console.log('patient', data);
   const [edit, setEdit] = useState(editDefault);
-  const [formData, setFormData] = useState(data);
+  const [formData, setFormData] = useState(getDataWithDefaults(data));
 
   const handleSave = async (event) => {
     event.preventDefault();
@@ -58,6 +65,19 @@ export default function Patient({ data, onExit, onSave, onDelete, editDefault = 
           ))}
         </TextField>
       )
+    } else if (field.field === 'dob') {
+      return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            required
+            label="Date of Birth"
+            value={formData[field.field] ? dayjs(formData[field.field]) : undefined}
+            onChange={(value) => setFormData({...formData, [field.field]: value.format('MM/DD/YYYY')})}
+            disabled={!edit}
+          />
+        </LocalizationProvider>
+      )
+
     } else if (field.default) {
         return (
           <TextField
