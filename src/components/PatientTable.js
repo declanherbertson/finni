@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import { addOrUpdatePatient } from '../patientActions';
 import _ from 'lodash';
-
-import {
-  DataGrid
-} from '@mui/x-data-grid';
+import { useEffect, useState } from 'react';
+import { addOrUpdatePatient, deletePatient } from '../patientActions';
+import { DataGrid } from '@mui/x-data-grid';
 import { DEFAULT_COLUMNS } from '../utils/patientConstants';
 import { getCustomFields } from '../utils/patientUtils';
 import { customColumns } from '../utils/patientUtils';
-import EditToolbar from './PatientTableToolbar';
+import Box from '@mui/material/Box';
+import PatientToolbar from './PatientTableToolbar';
 import Patient from './Patient';
 
 export default function PatientTable({ patients }) {
-  // console.log(patients.map(p => p.firstName));
   const [rows, setRows] = useState(patients);
   const [modalOpen, setModalOpen] = useState(undefined);
 
@@ -25,12 +21,27 @@ export default function PatientTable({ patients }) {
     setModalOpen(params.id);
   }, 100);
 
+  const handleAddPatient = _.debounce((params, event) => {
+    setModalOpen('NEW');
+  }, 100);
+
   const onSave = async (id, data) => {
     await addOrUpdatePatient(id, data);
     setModalOpen(undefined);
   }
 
+  const onDelete = async (id) => {
+    console.log('deleting', id);
+    if (id !== 'NEW') {
+      await deletePatient(id);
+    }
+    setModalOpen(undefined);
+  }
+
   const getPatientData = (id) => {
+    if (id === 'NEW') {
+      return { id: 'NEW' };
+    }
     return patients.find(p => p.id === id);
   }
 
@@ -42,7 +53,6 @@ export default function PatientTable({ patients }) {
 
   const customFields = getCustomFields(patients);
   const columns = [...DEFAULT_COLUMNS, ...customColumns(customFields)];
-  // console.log(columns, rows)
 
   return (
     <Box
@@ -57,7 +67,9 @@ export default function PatientTable({ patients }) {
         },
       }}
     >
-      {modalOpen && (<Patient data={getPatientData(modalOpen)} onExit={() => setModalOpen(undefined)} onSave={onSave} />)}
+      {modalOpen && (
+        <Patient data={getPatientData(modalOpen)} onExit={() => setModalOpen(undefined)} onSave={onSave} onDelete={onDelete} />
+      )}
       <DataGrid
         onRowClick={handleRowClick}
         rows={rows}
@@ -66,7 +78,7 @@ export default function PatientTable({ patients }) {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         slots={{
-          toolbar: () => <EditToolbar/>,
+          toolbar: () => <PatientToolbar onAddPatient={handleAddPatient}/>,
         }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },

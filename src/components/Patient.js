@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon  from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import { DEFAULT_FIELDS_MAP, STATUS_OPTIONS } from '../utils/patientConstants';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,14 +17,19 @@ import { handleCustomFormUpdate, handleDeleteCustomField } from '../utils/custom
 import { buildFieldsFromData, handleAddField } from '../utils/patientUtils';
 
 
-export default function Patient({ data, onExit, onSave, editDefault = false }) {
+export default function Patient({ data, onExit, onSave, onDelete, editDefault = false }) {
   const [edit, setEdit] = useState(editDefault);
-  const [formData, setFormData] = useState(data);    
+  const [formData, setFormData] = useState(data);
 
   const handleSave = async (event) => {
     event.preventDefault();
     console.log('saving', formData);
     await onSave(data.id, formData);
+    setEdit(false);
+  }
+
+  const handleDelete = async () => {
+    await onDelete(data.id);
     setEdit(false);
   }
 
@@ -88,13 +94,20 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
         Patient Record
         <span>
           {edit && <Button
+           variant="contained" size='small' color='error' startIcon={<DeleteIcon />} 
+           onClick={() => handleDelete()}>
+            Delete
+          </Button>
+          }
+          {edit && <Button
+           style={{'marginLeft': '1rem'}}
            variant="outlined" size='small' startIcon={<AddIcon />} 
            onClick={() => handleAddField(customFields, setCustomFields)}>
             Add Field
           </Button>
-        }
+          }
           <Button 
-            variant="text" type='submit' style={{'paddingLeft': '1.6rem'}}
+            variant="text" type='submit' style={{'marginLeft': '1rem'}}
             onClick={(e) => edit ? handleSave(e) : setEdit(true)} 
             startIcon={edit ? <SaveIcon /> : <EditIcon />}>
               {edit ? 'Save' : 'Edit'}

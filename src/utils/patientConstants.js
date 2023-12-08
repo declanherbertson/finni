@@ -66,7 +66,7 @@ export const DEFAULT_COLUMNS = [
     flex: 1,
     default: true,
     editable: false,
-    valueGetter: (params) => `${params.row.address?.join(', ') || ''}`,
+    valueGetter: (params) => `${Array.isArray(params.row.address) ? params.row.address.join(', ') || params.row.address : ''}`,
   },
 ];
 
