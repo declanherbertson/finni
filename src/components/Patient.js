@@ -5,11 +5,14 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import EditIcon  from '@mui/icons-material/Edit';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon  from '@mui/icons-material/Add';
+
 import SaveIcon from '@mui/icons-material/Save';
 import { DEFAULT_FIELDS_MAP, IGNORED_FIELDS, STATUS_OPTIONS } from '../utils/patientUtils';
 import MenuItem from '@mui/material/MenuItem';
 import _ from 'lodash';
+import CustomField from './CustomField';
 
 
 export default function Patient({ data, onExit, onSave, editDefault = false }) {
@@ -37,7 +40,28 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
       fields.set(key, {field: key, headerName: _.capitalize(key), value: data[key], type: typeof data[key]});
     }
   }
-  const formComponents = Array.from(fields.values()).map((field) => {
+
+  const [customFields, setCustomFields] = useState(Array.from(fields.values()));
+  const handleAddField = () => {
+    const newField = {field: `Field ${'7'}`, value: '', type: 'string'};
+    setCustomFields((f) => [...f, newField]);
+  };
+
+  const handleCustomFormUpdate = (e, field, row) => {
+    console.log(e.target.value, field, row);
+    setCustomFields((f) => f.map((r) => {
+      if (r.field === row.field) {
+        return {...r, [field]: e.target.value};
+      }
+      return r;
+    }));
+    setFormData({...formData, ...{...row, [field]: e.target.value}})
+  };
+
+
+  console.log(customFields);
+
+  const formComponents = Array.from(customFields.values()).map((field) => {
     if (field.field === 'status') {
       return (
         <TextField
@@ -59,33 +83,47 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
           ))}
         </TextField>
       )
+    } else if (field.default) {
+        return (
+          <TextField
+            name={field.field}
+            key={field.field}
+            id={field.field}
+            label={field.headerName}
+            type={field.type}
+            required={true}
+            value={formData[field.field]}
+            multiline={field.type === 'string'}
+            minRows={3}
+            onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
+            margin="normal"
+            variant="standard"
+            disabled={!edit}
+            InputProps={{readOnly: !edit, disableUnderline: true}}
+          />
+        )
+    } else {
+      return (
+        <CustomField 
+          onUpdate={(e, field, row) => handleCustomFormUpdate(e, field, row)}
+          onDelete={() => setCustomFields((f) => f.filter((r) => r.field !== field.field))}
+          row={field} canEdit={edit} 
+      />)
     }
-    return (
-      <TextField
-        name={field.field}
-        key={field.field}
-        id={field.field}
-        label={field.headerName}
-        type={field.type}
-        required={DEFAULT_FIELDS_MAP.has(field.field)}
-        value={formData[field.field]}
-        multiline={field.type === 'string'}
-        minRows={3}
-        onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
-        margin="normal"
-        variant="standard"
-        disabled={!edit}
-        InputProps={{readOnly: !edit, disableUnderline: true}}
-      />
-    )
+
   });
+
+  console.log(formComponents);
 
   
   return (
     <Dialog open={true} onClose={onExit} fullWidth={true} maxWidth={'xl'}>
       <DialogTitle style={{'display': 'flex', 'justifyContent': 'space-between'}}>
         Patient Record
-        <Button variant="text" type='submit' onClick={(e) => edit ? handleSave(e) : setEdit(true)} startIcon={edit ? <SaveIcon /> : <EditIcon />}>{edit ? 'Save' : 'Edit'}</Button>
+        <span>
+          {edit && <Button variant="outlined" size='small' startIcon={<AddIcon />} onClick={() => handleAddField()}>Add Field</Button>}
+          <Button variant="text" type='submit' style={{'paddingLeft': '1.6rem'}} onClick={(e) => edit ? handleSave(e) : setEdit(true)} startIcon={edit ? <SaveIcon /> : <EditIcon />}>{edit ? 'Save' : 'Edit'}</Button>
+        </span>
       </DialogTitle>
       <DialogContent className='FormContent'>
         {formComponents}

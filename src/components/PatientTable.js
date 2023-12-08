@@ -1,39 +1,14 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import TuneIcon from '@mui/icons-material/Tune';
 import { addOrUpdatePatient } from '../patientActions';
 import _ from 'lodash';
 
 import {
-  DataGrid,
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
+  DataGrid
 } from '@mui/x-data-grid';
 import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
+import EditToolbar from './PatientTableToolbar';
 import Patient from './Patient';
-
-function EditToolbar(patients) {
-  const addRecord = (id) => {
-    // TODO
-  };
-
-  return (
-    <GridToolbarContainer style={{'display': 'flex'}}>
-      <GridToolbarFilterButton />
-      <GridToolbarColumnsButton />
-      <GridToolbarExport />
-      <span style={{'flex': '1', 'display': 'flex', 'justifyContent': 'flex-end'}}>
-        <Button color="primary" variant='contained'  startIcon={<AddIcon />} onClick={addRecord}>
-          Add record
-        </Button>
-      </span>
-    </GridToolbarContainer>
-  );
-}
 
 export default function PatientTable({ patients }) {
   console.log(patients.map(p => p.firstName));
