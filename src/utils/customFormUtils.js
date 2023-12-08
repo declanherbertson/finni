@@ -9,7 +9,7 @@ export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, r
     setFormData((formData) => {
       const newFormData = {...formData};
       delete newFormData[row.field];
-      console.log('change field name', {...newFormData, [e.target.value]: row.value});
+
       return {...newFormData, [e.target.value]: row.value};
     });
     // update display state
@@ -22,7 +22,6 @@ export const handleCustomFormUpdate = (setCustomFields, setFormData, e, field, r
   } else if (field === 'value') {
     // update savable state
     setFormData((formData) => {
-      console.log('change field value', {...formData, [row.field]: e.target.value});
       return {...formData, [row.field]: e.target.value};
     });
     // update display state

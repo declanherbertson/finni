@@ -15,7 +15,7 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
         <ValidationTextField
           select
           error={!emptyValidator(formData[field.field])}
-          required={DEFAULT_FIELDS_MAP.has(field.field)}
+          required={true}
           label="Select"
           key={field.field}
           value={formData[field.field]}
@@ -68,19 +68,19 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
           margin="normal"
           variant="outlined"
           disabled={!edit}
-          InputProps={{readOnly: !edit, disableUnderline: true}}
+          InputProps={{readOnly: !edit}}
         />
       );
     } else if (field.default) {
       return (
         <ValidationTextField
-          error={!emptyValidator(formData[field.field])}
+          error={field.required && !emptyValidator(formData[field.field])}
           name={field.field}
           key={field.field}
           id={field.field}
           label={field.headerName}
           type={field.type}
-          required={true}
+          required={field.required}
           value={formData[field.field]}
           multiline={field.type === 'string'}
           minRows={3}
@@ -88,7 +88,7 @@ export const getFormComponents = (formData, setFormData, edit, customFields, set
           margin="normal"
           variant="outlined"
           disabled={!edit}
-          InputProps={{readOnly: !edit, disableUnderline: true}}
+          InputProps={{readOnly: !edit}}
         />
       );
     } else {

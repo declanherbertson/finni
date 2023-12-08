@@ -14,13 +14,11 @@ import {formValidator} from '../utils/validators';
 
 
 export default function Patient({data, onExit, onSave, onDelete, editDefault = false}) {
-  console.log('patient', data);
   const [edit, setEdit] = useState(editDefault);
   const [formData, setFormData] = useState(getDataWithDefaults(data));
 
   const handleSave = async (event) => {
     event.preventDefault();
-    console.log('saving', formData);
     await onSave(data.id, formData);
     setEdit(false);
   };

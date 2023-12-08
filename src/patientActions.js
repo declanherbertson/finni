@@ -9,7 +9,11 @@ export const usePatients = (user) => {
 };
 
 export const addOrUpdatePatient = async (id, patient) => {
-  console.log('form data', patient);
+  for (const key in patient) {
+    if (patient[key] === '' || patient[key] === undefined) {
+      delete patient[key];
+    }
+  }
   patient.owner = auth.currentUser.uid;
   if (!id || id === 'NEW') {
     const collectionRef = collection(db, 'patients');

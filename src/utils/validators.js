@@ -32,7 +32,7 @@ export const dateValidator = (value) => {
 
 export const formValidator = (formData) => {
   for (const field of Array.from(DEFAULT_FIELDS)) {
-    if (field === 'middelName') {
+    if (field === 'middleName' || field === 'id' || field === 'owner') {
       continue;
     }
     if (!formData[field]) {

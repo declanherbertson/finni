@@ -31,7 +31,6 @@ export default function PatientTable({patients}) {
   };
 
   const onDelete = async (id) => {
-    console.log('deleting', id);
     if (id !== 'NEW') {
       await deletePatient(id);
     }
