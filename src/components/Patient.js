@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,7 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon  from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-import { DEFAULT_COLUMNS_MAP, IGNORED_FIELDS } from '../utils/patientUtils';
+import { DEFAULT_FIELDS_MAP, IGNORED_FIELDS, STATUS_OPTIONS } from '../utils/patientUtils';
+import MenuItem from '@mui/material/MenuItem';
 import _ from 'lodash';
 
 
@@ -18,12 +19,11 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
   const handleSave = async (event) => {
     event.preventDefault();
     console.log(formData);
-    // TODO: loading
     await onSave(data.id, formData);
     setEdit(false);
   }
 
-  const fields = new Map(DEFAULT_COLUMNS_MAP);
+  const fields = new Map(DEFAULT_FIELDS_MAP);
 
   for (let key in data) {
     if (IGNORED_FIELDS.has(key)) {
@@ -38,6 +38,28 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
     }
   }
   const formComponents = Array.from(fields.values()).map((field) => {
+    if (field.field === 'status') {
+      return (
+        <TextField
+          select
+          required={DEFAULT_FIELDS_MAP.has(field.field)}
+          label="Select"
+          defaultValue={field.value}
+          helperText="Patient Status"
+          InputProps={{readOnly: !edit}}
+          disabled={!edit}
+          onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
+          multiline={true}
+          minRows={3}
+        >
+          {STATUS_OPTIONS.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      )
+    }
     return (
       <TextField
         name={field.field}
@@ -45,12 +67,14 @@ export default function Patient({ data, onExit, onSave, editDefault = false }) {
         id={field.field}
         label={field.headerName}
         type={field.type}
+        required={DEFAULT_FIELDS_MAP.has(field.field)}
         value={formData[field.field]}
         multiline={field.type === 'string'}
         minRows={3}
         onChange={(event) => setFormData({...formData, [field.field]: event.target.value})}
         margin="normal"
         variant="standard"
+        disabled={!edit}
         InputProps={{readOnly: !edit, disableUnderline: true}}
       />
     )

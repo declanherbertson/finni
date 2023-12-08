@@ -9,27 +9,28 @@ import _ from 'lodash';
 import {
   DataGrid,
   GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarExport,
 } from '@mui/x-data-grid';
 import { getCustomFields, DEFAULT_COLUMNS, customColumns } from '../utils/patientUtils';
 import Patient from './Patient';
 
 function EditToolbar(patients) {
-  const addFilter = () => {
-    // TODO
-  }
-
   const addRecord = (id) => {
     // TODO
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={addRecord}>
-        Add record
-      </Button>
-      <Button color="primary" startIcon={<TuneIcon />} onClick={addFilter}>
-        Filter
-      </Button>
+    <GridToolbarContainer style={{'display': 'flex'}}>
+      <GridToolbarFilterButton />
+      <GridToolbarColumnsButton />
+      <GridToolbarExport />
+      <span style={{'flex': '1', 'display': 'flex', 'justifyContent': 'flex-end'}}>
+        <Button color="primary" variant='contained'  startIcon={<AddIcon />} onClick={addRecord}>
+          Add record
+        </Button>
+      </span>
     </GridToolbarContainer>
   );
 }
@@ -88,7 +89,7 @@ export default function PatientTable({ patients }) {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         slots={{
-          toolbar: () => EditToolbar(patients),
+          toolbar: () => <EditToolbar/>,
         }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },

@@ -66,7 +66,31 @@ export const DEFAULT_COLUMNS = [
   },
 ];
 
-export const DEFAULT_COLUMNS_MAP = new Map(DEFAULT_COLUMNS.map(c => [c.field, c]));
+export const DEFAULT_NAME_FIELDS = [
+  { field: 'firstName',
+    headerName: 'First Name',
+    type: 'string',
+    width: 150,
+    flex: 1,
+    editable: false,
+  },
+  { field: 'middleName',
+    headerName: 'Middle Name',
+    type: 'string',
+    width: 150,
+    flex: 1,
+    editable: false,
+  },
+  { field: 'lastName',
+    headerName: 'Last Name',
+    type: 'string',
+    width: 150,
+    flex: 1,
+    editable: false,
+  },
+]
+
+export const DEFAULT_FIELDS_MAP = new Map([...DEFAULT_NAME_FIELDS.map(c => [c.field, c]), ...DEFAULT_COLUMNS.slice(1).map(c => [c.field, c])]);
 
 export const customColumns = (customFields) => {
   return customFields.map(field => {
@@ -95,6 +119,13 @@ export const aggregateStatuses = (patients) => {
   }
   return statuses;
 }
+
+export const STATUS_OPTIONS = [
+  { value: 'inquiry', label: 'Inquiry' },
+  { value: 'onboarding', label: 'Onboarding' },
+  { value: 'active', label: 'Active' },
+  { value: 'churned', label: 'Churned' },
+];
 
 export const STATUS_COLOUR_MAP = {
   'inquiry': 'secondary',
